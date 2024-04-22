@@ -10,6 +10,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      '@service/*': fileURLToPath(new URL('./src/service', import.meta.url)),
+      '@stores/*': fileURLToPath(new URL('./src/stores/**/index.ts', import.meta.url)),
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
