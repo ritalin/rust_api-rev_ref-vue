@@ -1,9 +1,8 @@
 import { expect, describe, beforeAll, beforeEach, it, test } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
 
 import { initDb } from "@/service/database"
 import { useConnectorStore } from "."
-import { setActivePinia, createPinia } from 'pinia'
-
 
 describe('Connect database', () => {
     beforeEach(() => {
