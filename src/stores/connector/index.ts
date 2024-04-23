@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia'
 import type { ConnectionProvider, ConnectionWrapper } from '@/service/core'
 import { createSchemaCore, truncateCore, ingestCore } from './dao'
+import { ref } from 'vue'
 
 export type IngestOption = 'NeedTruncate' | 'None'
 
 export const useConnectorStore = defineStore('connector', () => {
   let db: ConnectionProvider
 
-  const ingest = async (provider: ConnectionProvider, namespace: string, option: IngestOption = 'NeedTruncate') => {
+  const ingestAsync = async (provider: ConnectionProvider, namespace: string, option: IngestOption = 'NeedTruncate') => {
       db = provider
         
       const conn = await db.connect()
@@ -21,9 +22,9 @@ export const useConnectorStore = defineStore('connector', () => {
     await ingestCore(conn, namespace)
 }
 
-  const connect = (): Promise<ConnectionWrapper> => {
-    return db.connect()
+  const connectAsync = (): Promise<ConnectionWrapper> => {
+    return db!.connect()
   }
 
-  return { ingest, connect }
+  return { ingestAsync, connectAsync }
 })

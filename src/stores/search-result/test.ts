@@ -16,13 +16,13 @@ describe('Connect database', () => {
         setActivePinia(createPinia())
 
         const connectorStore = useConnectorStore()
-        connectorStore.ingest(provider, 'src/assets/fixture/search-result')
+        connectorStore.ingestAsync(provider, 'src/assets/fixture/search-result')
     })
 
     it ("Empty phrase of both type", async () => {
         const store = useSearchResultStore()
 
-        const results = await store.list({ args: '', returns: '' })
+        const results = await store.listAsync({ args: '', returns: '' })
         expect(store.searching).to.be.false
         expect(results).to.be.lengthOf(0)
     })
@@ -31,7 +31,7 @@ describe('Connect database', () => {
         const store = useSearchResultStore()
 
         expect(store.searching).to.be.false
-        const results = await store.list({ args: 'i32' })
+        const results = await store.listAsync({ args: 'i32' })
         expect(store.searching).to.be.true
 
         expect(results).to.be.lengthOf(2)
@@ -43,7 +43,7 @@ describe('Connect database', () => {
         const store = useSearchResultStore()
 
         expect(store.searching).to.be.false
-        const results = await store.list({ returns: 'Result' })
+        const results = await store.listAsync({ returns: 'Result' })
         expect(store.searching).to.be.true
 
         expect(results).to.be.lengthOf(5)
@@ -58,7 +58,7 @@ describe('Connect database', () => {
         const store = useSearchResultStore()
 
         expect(store.searching).to.be.false
-        const results = await store.list({ args: 'Duration', returns: 'Result' })
+        const results = await store.listAsync({ args: 'Duration', returns: 'Result' })
         expect(store.searching).to.be.true
 
         expect(results).to.be.lengthOf(2)

@@ -15,9 +15,9 @@ describe('Connect database', () => {
 
         const connectorStore = useConnectorStore()
 
-        await connectorStore.ingest(provider, 'src/assets/fixture/connector')
+        await connectorStore.ingestAsync(provider, 'src/assets/fixture/connector')
 
-        const conn = await connectorStore.connect()
+        const conn = await connectorStore.connectAsync()
         try {
             {
                 const results = await conn.runQuery("select * from prototype")

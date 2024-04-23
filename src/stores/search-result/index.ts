@@ -9,14 +9,14 @@ export const useSearchResultStore = defineStore('search-result', () => {
     const items = ref([] as SearchResult[])
     const searching = ref(false)
     
-    const list = async (needle: Condition) => {
-        if ((needle.args === '') || (needle.returns === '')) {
+    const listAsync = async (needle: Condition) => {
+        if ((needle.args === '') && (needle.returns === '')) {
             searching.value = false
             return []
         }
 
         const connectorStore = useConnectorStore()
-        const conn = await connectorStore.connect()
+        const conn = await connectorStore.connectAsync()
         try {
             items.value = await listFunctions(conn, needle)
             searching.value = true
@@ -29,7 +29,7 @@ export const useSearchResultStore = defineStore('search-result', () => {
     }
 
     return { 
-        searching,
-        list 
+        searching, items,
+        listAsync 
     }
 })
