@@ -11,6 +11,7 @@ export const useSearchResultStore = defineStore('search-result', () => {
     
     const listAsync = async (needle: Condition) => {
         if ((needle.args === '') && (needle.returns === '')) {
+            items.value = []
             searching.value = false
             return []
         }
