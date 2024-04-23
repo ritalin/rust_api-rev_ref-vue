@@ -6,7 +6,7 @@ import type { ConnectionProvider } from '@/service/core'
 import { useSearchFormStore } from '.'
 import { useSearchResultStore } from '../search-result'
 
-describe('Connect database', () => {
+describe('Execute search from form', () => {
     let provider: ConnectionProvider
 
     beforeAll(async () => {

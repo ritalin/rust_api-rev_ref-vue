@@ -6,7 +6,7 @@ import { initDb } from '@/service/database'
 import { useConnectorStore } from '../connector'
 import { useSearchResultStore } from '.'
 
-describe('Connect database', () => {
+describe('Execute search', () => {
     let provider: ConnectionProvider
 
     beforeAll(async () => {
