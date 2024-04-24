@@ -6,6 +6,8 @@ import type { Condition, SearchResult } from "@/types/state_types"
 import query from '@/assets/sql/listFunctions.sql?raw'
 
 export const listFunctions = async (conn: ConnectionWrapper, needle: Condition): Promise<SearchResult[]> => {
+    console.log("(parameters)", needle)
+
     try {
         const emptieSet = ["", null, undefined]
         const results = await conn.runQuery(
@@ -16,11 +18,12 @@ export const listFunctions = async (conn: ConnectionWrapper, needle: Condition):
 
         const items =  results.toArray().map((row: StructRowProxy<any>) => {
             return {
-                name: row.qual_symbol,
+                name: row.name,
                 args: row.args.toArray().map((arg: any) => arg.toString()),
                 returns: row.returns,
             }
         })
+        console.log("(result)", items.length)
 
         return items
     }

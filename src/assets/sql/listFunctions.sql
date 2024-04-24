@@ -33,4 +33,4 @@ join lateral (
 		ts1.prototype_id = t1.id
 		and ts1.kind = 'return'
 ) on true
-order by t1.id
+order by "name"
