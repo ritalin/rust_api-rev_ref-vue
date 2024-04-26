@@ -1,4 +1,4 @@
-select t1.qual_symbol as "name", args, "returns"
+select t1.qual_symbol as "name", args, "returns", since
 from prototype t1
 join lateral (
     select list(t3.symbol) as args
@@ -36,5 +36,11 @@ join lateral (
 		ts1.prototype_id = t1.id
 		and ts1.kind = 'return'
         and ts1.category = 'nominal'
+) on true
+left outer join lateral (
+    select ts2.since
+    from deprecated_prototype_ref ts1
+    join deprecated ts2 on ts1.deprecated_id = ts2.id
+    where ts1.prototype_id = t1.id
 ) on true
 order by "name"

@@ -8,6 +8,7 @@ import { listFunctions } from "./dao"
 export const useSearchResultStore = defineStore('search-result', () => {
     const items = ref([] as SearchResult[])
     const searching = ref(false)
+    const show_deprecated = ref(false)
     
     const listAsync = async (needle: ConditionSet) => {
         if ((needle.args.phrase === '') && (needle.returns.phrase === '')) {
@@ -30,7 +31,7 @@ export const useSearchResultStore = defineStore('search-result', () => {
     }
 
     return { 
-        searching, items,
+        searching, items, show_deprecated,
         listAsync 
     }
 })

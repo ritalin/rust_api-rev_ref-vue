@@ -25,6 +25,7 @@ export const listFunctions = async (conn: ConnectionWrapper, needle: ConditionSe
                 name: row.name,
                 args: row.args.toArray().map((arg: any) => arg.toString()),
                 returns: row.returns,
+                deprecated_since: row.since,
             }
         })
         console.log("(result)", items.length)

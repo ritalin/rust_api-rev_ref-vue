@@ -20,3 +20,14 @@ create or replace table type_ref (
     category type_category not null,
     constraint type_ref_pk primary key (prototype_id, type_id, kind, category)
 );
+
+create or replace table deprecated (
+    id BIGINT not null primary key,
+    since varchar(256) not null
+);
+
+create or replace table deprecated_prototype_ref (
+    prototype_id BIGINT not null,
+    deprecated_id BIGINT not null,
+    constraint deprecated_prototype_ref_pk primary key (prototype_id, deprecated_id)
+);
