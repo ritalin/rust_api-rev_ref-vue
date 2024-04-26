@@ -162,4 +162,48 @@ describe('Execute search from form', () => {
         expect(resultStore.searching).to.be.true
         expect(resultStore.items).to.be.lengthOf(2)
     })
+
+    it("Search args type with slice option", async () => {
+        const formStore = useSearchFormStore()
+        const resultStore = useSearchResultStore()
+        
+        formStore.argOptions.with_slice = true
+        expect(resultStore.searching).to.be.false
+
+        await formStore.setArgsAsync("u8")
+        expect(resultStore.searching).to.be.true
+    })
+
+    it("Search args type with tuple option", async () => {
+        const formStore = useSearchFormStore()
+        const resultStore = useSearchResultStore()
+        
+        formStore.argOptions.with_tuple = true
+        expect(resultStore.searching).to.be.false
+
+        await formStore.setArgsAsync("u8")
+        expect(resultStore.searching).to.be.true
+    })
+
+    it("Search return type with slice option", async () => {
+        const formStore = useSearchFormStore()
+        const resultStore = useSearchResultStore()
+        
+        formStore.returnOptions.with_slice = true
+        expect(resultStore.searching).to.be.false
+
+        await formStore.setReturnAsync("u8")
+        expect(resultStore.searching).to.be.true
+    })
+
+    it("Search args type with slice option", async () => {
+        const formStore = useSearchFormStore()
+        const resultStore = useSearchResultStore()
+        
+        formStore.returnOptions.with_tuple = true
+        expect(resultStore.searching).to.be.false
+
+        await formStore.setReturnAsync("u8")
+        expect(resultStore.searching).to.be.true
+    })
 })

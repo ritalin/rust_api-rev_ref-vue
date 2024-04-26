@@ -12,6 +12,7 @@ join lateral (
             where 
                 ts1.prototype_id = t1.id
                 and ts1.kind = 'return'
+                and ts1.category = any (select unnest(['nominal', ?, ?]))
                 and (ts2.symbol = ?) is not false
         )
         and exists (
@@ -20,9 +21,11 @@ join lateral (
             where 
                 ts1.prototype_id = t1.id
                 and ts1.kind = 'arg'
+                and ts1.category = any (select unnest(['nominal', ?, ?])) 
                 and (ts2.symbol = ?) is not false
         )
         and t2.kind = 'arg'
+        and t2.category = 'nominal'
     group by t2.prototype_id
 ) on true
 join lateral (
@@ -32,5 +35,6 @@ join lateral (
 	where 
 		ts1.prototype_id = t1.id
 		and ts1.kind = 'return'
+        and ts1.category = 'nominal'
 ) on true
 order by "name"

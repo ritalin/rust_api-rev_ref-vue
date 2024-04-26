@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useSearchResultStore } from '@/stores/search-result'; 
 import { storeToRefs } from 'pinia';
-import { isTemplateMiddle } from 'typescript';
 
 const { items, searching } = storeToRefs(useSearchResultStore())
 </script>

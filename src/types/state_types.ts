@@ -1,6 +1,13 @@
-export type PhraseKind = 'args' | 'returns'
+export type Condition = Partial<{
+    phrase: string,
+    with_slice: boolean,
+    with_tuple: boolean,
+}>
 
-export type Condition = Partial<Record<PhraseKind, string>>
+export type ConditionSet = {
+    args: Condition,
+    returns: Condition,
+}
 
 export type SearchResult = {
     name: string
