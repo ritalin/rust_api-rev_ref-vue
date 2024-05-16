@@ -11,6 +11,7 @@ export const createSchemaCore = async (conn: ConnectionWrapper) => {
 
 export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => {
     conn.runScript(`copy deprecated from '${namespace}/deprecated.parquet' (FORMAT PARQUET)`)
+    conn.runScript(`copy prototype from '${namespace}/prototype.parquet' (FORMAT PARQUET)`)
     
     const tablenames = [
         "crate_symbol",
