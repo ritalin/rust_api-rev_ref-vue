@@ -12,15 +12,18 @@ export const createSchemaCore = async (conn: ConnectionWrapper) => {
 export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => {
     conn.runScript(`copy deprecated from '${namespace}/deprecated.parquet' (FORMAT PARQUET)`)
     conn.runScript(`copy prototype from '${namespace}/prototype.parquet' (FORMAT PARQUET)`)
+    conn.runScript(`copy prototype_crate_ref from '${namespace}/prototype_crate_ref.parquet' (FORMAT PARQUET)`)
+    conn.runScript(`copy prototype_type_ref from '${namespace}/prototype_type_ref.parquet' (FORMAT PARQUET)`)
+    conn.runScript(`copy type_symbol from '${namespace}/type_symbol.parquet' (FORMAT PARQUET)`)
     
     const tablenames = [
         "crate_symbol",
         // "deprecated",
         "prototype_deprecated_ref",
         // "prototype",
-        "prototype_crate_ref",
-        "prototype_type_ref",
-        "type_symbol",
+        // "prototype_crate_ref",
+        // "prototype_type_ref",
+        // "type_symbol",
     ]
 
     for (let name of tablenames) {
