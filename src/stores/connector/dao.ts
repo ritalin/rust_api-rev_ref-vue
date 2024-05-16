@@ -21,7 +21,7 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
     ]
 
     for (let name of tablenames) {
-        const sql = `copy ${name} from '${namespace}/${name}.json' (FORMAT 'json', array 'true', file_size_bytes '2k')`
+        const sql = `copy ${name} from '${namespace}/${name}.json' (FORMAT 'json', array 'true')`
         await conn.runScript(sql)
     }
 }
