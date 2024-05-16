@@ -16,5 +16,5 @@ export default defineConfig({
       vue: 'vue/dist/vue.esm-bundler.js'
     }
   },
-  base: '/app/rust-rev-api-vue/'
+  base: '/rust_api-rev_ref-vue/'
 })
