@@ -12,7 +12,7 @@ export const createSchemaCore = async (conn: ConnectionWrapper) => {
 export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => {
     const tablenames = [
         "crate_symbol",
-        "deprecated",
+        // "deprecated",
         "prototype_deprecated_ref",
         "prototype",
         "prototype_crate_ref",
@@ -24,4 +24,6 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
         const sql = `copy ${name} from '${namespace}/${name}.json' (FORMAT 'json', array 'true')`
         await conn.runScript(sql)
     }
+
+    conn.runScript(`copy deprecated from '${namespace}/deprecated.parquet' (FORMAT PARQUET)`)
 }
