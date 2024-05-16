@@ -14,5 +14,6 @@ export default defineConfig({
       '@stores/*': fileURLToPath(new URL('./src/stores/**/index.ts', import.meta.url)),
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  base: '/app/rust-rev-api-vue/'
 })

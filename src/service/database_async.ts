@@ -25,7 +25,7 @@ export const initAsyncDb = async (): Promise<ConnectionProvider> => {
     const selected_bundle = await duckdb.selectBundle(bundles)
 
     const worker = new Worker(selected_bundle.mainWorker!)
-    const logger = new duckdb.ConsoleLogger()
+    const logger = import.meta.env.PROD ? new duckdb.VoidLogger(): new duckdb.ConsoleLogger()
 
     const instance = new AsyncDuckDB(logger, worker)
     await instance.instantiate(selected_bundle.mainModule, selected_bundle.pthreadWorker) 

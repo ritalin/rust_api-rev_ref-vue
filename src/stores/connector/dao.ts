@@ -24,7 +24,4 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
         const sql = `copy ${name} from '${namespace}/${name}.json' (FORMAT 'json', array 'true')`
         await conn.runScript(sql)
     }
-
-    // console.log((await result).toArray().map((a: StructRowProxy<any>) => a.toString()))
-    // console.log(results.map(r => r.toArray().map((a: StructRowProxy<any>) => a.toString())))
 }
