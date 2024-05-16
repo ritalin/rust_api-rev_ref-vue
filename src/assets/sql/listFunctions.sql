@@ -20,7 +20,7 @@ from (
             where 
                 ts1.prototype_id = t1.id
                 and ts1.kind = 'return'
-                and ts1.category = any (select unnest(['nominal', ph.arg_cat_1, ph.arg_cat_2]))
+                and ts1.category = any (select unnest(['nominal', ph.ret_cat_1, ph.ret_cat_2])) 
                 and (ts2.symbol = ph.ret_phrase) is not false
         )
         and exists (
@@ -29,7 +29,7 @@ from (
             where 
                 ts1.prototype_id = t1.id
                 and ts1.kind = 'arg'
-                and ts1.category = any (select unnest(['nominal', ph.ret_cat_1, ph.ret_cat_2])) 
+                and ts1.category = any (select unnest(['nominal', ph.arg_cat_1, ph.arg_cat_2]))
                 and (ts2.symbol = ph.arg_phrase) is not false
         )
         and exists (
@@ -44,4 +44,5 @@ left outer join lateral (
     from prototype_deprecated_ref ts1
     join deprecated ts2 on ts1.deprecated_id = ts2.id
     where ts1.prototype_id = v1.id
-) v2 on true;
+) v2 on true
+order by v1.qual_symbol;
