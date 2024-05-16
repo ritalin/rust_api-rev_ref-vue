@@ -17,7 +17,7 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
         "crate_symbol",
         // "deprecated",
         "prototype_deprecated_ref",
-        "prototype",
+        // "prototype",
         "prototype_crate_ref",
         "prototype_type_ref",
         "type_symbol",
