@@ -12,7 +12,8 @@ export default defineConfig({
     alias: {
       '@service/*': fileURLToPath(new URL('./src/service', import.meta.url)),
       '@stores/*': fileURLToPath(new URL('./src/stores/**/index.ts', import.meta.url)),
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      vue: 'vue/dist/vue.esm-bundler.js'
     }
   },
   base: '/app/rust-rev-api-vue/'
