@@ -1,1 +1,0 @@
-select exists(from information_schema.tables) as has_schema

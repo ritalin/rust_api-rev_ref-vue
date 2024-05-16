@@ -1,46 +1,47 @@
-select t1.qual_symbol as "name", args, "returns", since
-from prototype t1
-join lateral (
-    select list(t3.symbol) as args
-    from type_ref t2
-    join type_symbol t3 on t2.type_id = t3.id
+with ph as materialized (
+    select 
+        ?::int as crate_id, 
+        ?::varchar as ret_phrase,
+        ?::type_category as ret_cat_1,
+        ?::type_category as ret_cat_2,
+        ?::varchar as arg_phrase,
+        ?::type_category as arg_cat_1,
+        ?::type_category as arg_cat_2,
+)
+select v1.*, v2.*
+from (
+    select t1.id, t1.qual_symbol
+    from prototype t1
+    cross join ph
     where
-        t1.id = t2.prototype_id
-        and exists (
-            from type_ref ts1
+        exists (
+            from prototype_type_ref ts1
             join type_symbol ts2 on ts1.type_id = ts2.id
             where 
                 ts1.prototype_id = t1.id
                 and ts1.kind = 'return'
-                and ts1.category = any (select unnest(['nominal', ?, ?]))
-                and (ts2.symbol = ?) is not false
+                and ts1.category = any (select unnest(['nominal', ph.arg_cat_1, ph.arg_cat_2]))
+                and (ts2.symbol = ph.ret_phrase) is not false
         )
         and exists (
-            from type_ref ts1
+            from prototype_type_ref ts1
             join type_symbol ts2 on ts1.type_id = ts2.id
             where 
                 ts1.prototype_id = t1.id
                 and ts1.kind = 'arg'
-                and ts1.category = any (select unnest(['nominal', ?, ?])) 
-                and (ts2.symbol = ?) is not false
+                and ts1.category = any (select unnest(['nominal', ph.ret_cat_1, ph.ret_cat_2])) 
+                and (ts2.symbol = ph.arg_phrase) is not false
         )
-        and t2.kind = 'arg'
-        and t2.category = 'nominal'
-    group by t2.prototype_id
-) on true
-join lateral (
-	select ts2,symbol as "returns"
-	from type_ref ts1
-	join type_symbol ts2 on ts1.type_id = ts2.id
-	where 
-		ts1.prototype_id = t1.id
-		and ts1.kind = 'return'
-        and ts1.category = 'nominal'
-) on true
+        and exists (
+            from prototype_crate_ref ts1
+            where
+                ts1.prototype_id = t1.id
+                and (ts1.crate_id = ph.crate_id) is not false
+        )
+) v1
 left outer join lateral (
-    select ts2.since
-    from deprecated_prototype_ref ts1
+    select ts2.since,
+    from prototype_deprecated_ref ts1
     join deprecated ts2 on ts1.deprecated_id = ts2.id
-    where ts1.prototype_id = t1.id
-) on true
-order by "name"
+    where ts1.prototype_id = v1.id
+) v2 on true;

@@ -1,33 +1,20 @@
-create type type_kind as enum ('arg', 'return');
-create type type_category as enum ('nominal', 'slice', 'tuple');
 
-create table prototype (
-    id BIGINT not null primary key,
-    symbol varchar(64) not null,
-    qual_symbol varchar(256) not null
-);
+CREATE TYPE type_category AS ENUM('nominal', 'slice', 'tuple', 'owner');
+CREATE TYPE type_kind AS ENUM('arg', 'return');
 
-create table type_symbol (
-    id BIGINT not null primary key,
-    symbol varchar(64) not null,
-    qual_symbol varchar(256) not null
-);
+CREATE SEQUENCE crate_symbol_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 4 NO CYCLE;
+CREATE SEQUENCE deprecated_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 8 NO CYCLE;
+CREATE SEQUENCE prototype_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 3148 NO CYCLE;
+CREATE SEQUENCE type_symbol_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 12614 NO CYCLE;
 
-create or replace table type_ref (
-    prototype_id BIGINT not null,
-    type_id BIGINT not null,
-    kind type_kind not null,
-    category type_category not null,
-    constraint type_ref_pk primary key (prototype_id, type_id, kind, category)
-);
+CREATE TABLE crate_symbol(id BIGINT PRIMARY KEY DEFAULT(nextval('crate_symbol_seq')), symbol VARCHAR NOT NULL);
+CREATE TABLE deprecated(id BIGINT PRIMARY KEY DEFAULT(nextval('deprecated_seq')), since VARCHAR NOT NULL);
+CREATE TABLE prototype_deprecated_ref(prototype_id BIGINT, deprecated_id BIGINT, PRIMARY KEY(prototype_id, deprecated_id));
+CREATE TABLE prototype(id BIGINT PRIMARY KEY, symbol VARCHAR NOT NULL, qual_symbol VARCHAR NOT NULL, brief_symbol VARCHAR NOT NULL);
+CREATE TABLE prototype_crate_ref(crate_id BIGINT, prototype_id BIGINT, PRIMARY KEY(crate_id, prototype_id));
+CREATE TABLE prototype_type_ref(prototype_id BIGINT, type_id BIGINT, kind ENUM('arg', 'return'), category ENUM('nominal', 'slice', 'tuple', 'owner'), PRIMARY KEY(prototype_id, type_id, kind, category));
+CREATE TABLE type_symbol(id BIGINT PRIMARY KEY, symbol VARCHAR NOT NULL);
 
-create or replace table deprecated (
-    id BIGINT not null primary key,
-    since varchar(256) not null
-);
 
-create or replace table deprecated_prototype_ref (
-    prototype_id BIGINT not null,
-    deprecated_id BIGINT not null,
-    constraint deprecated_prototype_ref_pk primary key (prototype_id, deprecated_id)
-);
+
+

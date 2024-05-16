@@ -1,4 +1,0 @@
-[
-	{"id":1,"symbol":"as_fd","qual_symbol":"AsFd::as_fd(std::os::unix::net::datagram::UnixDatagram) -> BorrowedFd"},
-	{"id":2,"symbol":"as_fd","qual_symbol":"AsFd::as_fd(std::os::unix::net::listener::UnixListener) -> BorrowedFd"}
-]

@@ -1,10 +1,10 @@
-import type { ConditionSet } from "@/types/state_types";
+import type { ConditionSet, CrateId } from "@/types/state_types";
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import { useSearchResultStore } from "../search-result";
 
 export const useSearchFormStore = defineStore('form', () => {
-    const conditions = ref({ args: '', returns: '' })
+    const conditions = ref({ crate_id: null as CrateId | null, args: '', returns: '' })
     const argOptions = ref({ with_slice: false, with_tuple: false })
     const returnOptions = ref({ with_slice: false, with_tuple: false })
 
@@ -22,6 +22,13 @@ export const useSearchFormStore = defineStore('form', () => {
         }
     }
 
+    const switchCrateAsync = async (value: CrateId | null) => {
+        if (conditions.value.crate_id !== value) {
+            conditions.value.crate_id = value
+            await update()
+        }
+    }
+
     watch(returnOptions.value, async (_newValues, _oldValues) => {
         if (conditions.value.returns !== '') {
             await update()
@@ -35,15 +42,16 @@ export const useSearchFormStore = defineStore('form', () => {
 
     const update = async () => {
         const needle: ConditionSet = {
+            crateId: conditions.value.crate_id,
             args: {
                 phrase: conditions.value.args,
-                with_slice: argOptions.value.with_slice,
-                with_tuple: argOptions.value.with_tuple,
+                withSlice: argOptions.value.with_slice,
+                withTuple: argOptions.value.with_tuple,
             },
             returns: {
                 phrase: conditions.value.returns,
-                with_slice: returnOptions.value.with_slice,
-                with_tuple: returnOptions.value.with_tuple,
+                withSlice: returnOptions.value.with_slice,
+                withTuple: returnOptions.value.with_tuple,
             }
         }
 
@@ -51,5 +59,5 @@ export const useSearchFormStore = defineStore('form', () => {
         await listAsync(needle)
     }
 
-    return { argOptions, returnOptions, setArgsAsync, setReturnAsync }
+    return { argOptions, returnOptions, setArgsAsync, setReturnAsync, switchCrateAsync }
 })

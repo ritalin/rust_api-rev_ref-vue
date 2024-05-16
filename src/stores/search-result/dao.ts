@@ -1,9 +1,10 @@
 import type { StructRowProxy } from "@apache-arrow/ts"
 
 import type { ConnectionWrapper } from "@/service/core"
-import type { ConditionSet, SearchResult } from "@/types/state_types"
+import type { ConditionSet, Crate, SearchResult } from "@/types/state_types"
 
-import query from '@/assets/sql/listFunctions.sql?raw'
+import queryListFunctions from '@/assets/sql/listFunctions.sql?raw'
+import queryListCrates from '@/assets/sql/listCrates.sql?raw'
 
 export const listFunctions = async (conn: ConnectionWrapper, needle: ConditionSet): Promise<SearchResult[]> => {
     console.log("(parameters)", needle)
@@ -11,20 +12,20 @@ export const listFunctions = async (conn: ConnectionWrapper, needle: ConditionSe
     try {
         const emptieSet = ["", null, undefined]
         const results = await conn.runQuery(
-            query, 
-            needle.returns.with_slice ? 'slice' : null,
-            needle.returns.with_tuple ? 'tuple' :  null,
+            queryListFunctions, 
+            Number(needle.crateId),
             emptieSet.includes(needle.returns.phrase) ? null : needle.returns.phrase, 
-            needle.args.with_slice ? 'slice' : null,
-            needle.args.with_tuple ? 'tuple' : null,
-            emptieSet.includes(needle.args.phrase) ? null : needle.args.phrase
+            needle.returns.withSlice ? 'slice' : null,
+            needle.returns.withTuple ? 'tuple' :  null,
+            emptieSet.includes(needle.args.phrase) ? null : needle.args.phrase,
+            needle.args.withSlice ? 'slice' : null,
+            needle.args.withTuple ? 'tuple' : null,
         )
 
         const items =  results.toArray().map((row: StructRowProxy<any>) => {
             return {
-                name: row.name,
-                args: row.args.toArray().map((arg: any) => arg.toString()),
-                returns: row.returns,
+                id: row.id,
+                qualName: row.qual_symbol,
                 deprecated_since: row.since,
             }
         })
@@ -37,4 +38,15 @@ export const listFunctions = async (conn: ConnectionWrapper, needle: ConditionSe
 
         return []
     }
+}
+
+export const listCrates = async (conn: ConnectionWrapper): Promise<Crate[]> => {
+    const rows = await conn.runQuery(queryListCrates)
+    
+    return rows.toArray().map((row: StructRowProxy<any>) => {
+        return {
+            id: row.id,
+            name: row.symbol,
+        }
+    })
 }

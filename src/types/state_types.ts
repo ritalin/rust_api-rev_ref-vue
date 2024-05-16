@@ -1,17 +1,24 @@
 export type Condition = Partial<{
     phrase: string
-    with_slice: boolean
-    with_tuple: boolean
+    withSlice: boolean
+    withTuple: boolean
 }>
 
 export type ConditionSet = {
+    crateId: CrateId | null
     args: Condition
     returns: Condition
 }
 
 export type SearchResult = {
-    name: string
-    args: string[]
-    returns: string
+    id: number
+    qualName: string
     deprecated_since: string | null
+}
+
+export type CrateId = number & { crate_id: never }
+
+export type Crate = {
+    id: CrateId
+    name: string
 }
