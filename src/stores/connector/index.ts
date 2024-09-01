@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { ConnectionProvider, ConnectionWrapper } from '@/service/core'
-import { createSchemaCore, ingestCore, type IngestionQuery } from './dao'
+import { createSchemaCore, ingestCore } from './dao'
 
 export type IngestOption = 'NeedTruncate' | 'None'
 
