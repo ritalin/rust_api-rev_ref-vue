@@ -65,4 +65,15 @@ class AsyncDBConnection implements ConnectionWrapper {
     close(): Promise<void> {
         return this.connection.close()
     }
-}
+    
+    beginTransaction(): Promise<void> {
+        return this.connection.query("begin transaction")
+    }
+
+    commit(): Promise<void> {
+        return this.connection.query("commit")
+    }
+
+    rollback(): Promise<void> {
+        return this.connection.query("rollback")
+    }}

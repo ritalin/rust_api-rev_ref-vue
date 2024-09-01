@@ -55,4 +55,15 @@ class BlockingConnection implements ConnectionWrapper {
     async close(): Promise<void> {
         this.connection.close()
     }    
-}
+
+    async beginTransaction(): Promise<void> {
+        return this.connection.query("begin transaction")
+    }
+
+    async commit(): Promise<void> {
+        return this.connection.query("commit")
+    }
+
+    async rollback(): Promise<void> {
+        return this.connection.query("rollback")
+    }}
