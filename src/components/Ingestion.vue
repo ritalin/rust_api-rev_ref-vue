@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { initAsyncDb } from '@/service/database_async'; 
+import { initAsyncDb } from '@/service/database_async_2'; 
 import { useConnectorStore } from '@/stores/connector'
 import { useSearchFormStore } from '@/stores/form';
 import { useSearchResultStore } from '@/stores/search-result';

@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta http-equiv="content-security-policy" content="default-src 'self'; script-src 'unsafe-eval' 'self'; style-src 'unsafe-inline'; style-src-elem 'self'">
+    <!-- <meta http-equiv="content-security-policy" content="default-src 'self'; script-src 'unsafe-eval' 'self'; style-src 'unsafe-inline'; style-src-elem 'self'"> -->
+    <meta http-equiv="content-security-policy" content="default-src 'self'; connect-src 'self' https://cdn.jsdelivr.net https://extensions.duckdb.org/ blob:; script-src 'unsafe-eval' 'self' https://cdn.jsdelivr.net blob:; style-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:;">
+
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rust API逆引き検索</title>
