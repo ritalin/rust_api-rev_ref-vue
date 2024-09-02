@@ -9,7 +9,7 @@ export const initAsyncDb = async (): Promise<ConnectionProvider> => {
     const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
 
     const c = await caches.open("cache.duckdb")
-    
+
     const buf_wasm = await loadModule(bundle.mainModule, c)
     const url_wasm = URL.createObjectURL(buf_wasm)
 
@@ -21,6 +21,9 @@ export const initAsyncDb = async (): Promise<ConnectionProvider> => {
 
     const instance = new AsyncDuckDB(logger, worker)
     await instance.instantiate(url_wasm, bundle.pthreadWorker) 
+
+    URL.revokeObjectURL(url_worker)
+    URL.revokeObjectURL(url_wasm)
 
     return new AsyncDBBindings(instance)
 }
