@@ -37,10 +37,10 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
             const sql = `copy ${name} from '${namespace}/${name}.parquet' (FORMAT PARQUET)`
             await conn.runScript(sql)
         }
-        conn.commit();
+        await conn.commit();
     }
     catch (_) {
-        conn.rollback();
+        await conn.rollback();
     }
 
 }
