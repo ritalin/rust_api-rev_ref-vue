@@ -33,13 +33,13 @@ const { items, searching, show_deprecated } = storeToRefs(useSearchResultStore()
         <tbody>
           <tr class="flex border-slate-300 [&:nth-child(n+2)]:border-t-[1px] mx-2" v-for="item in items">
             <td 
-              v-show="show_deprecated || (item.deprecated_since === null)"
+              v-show="show_deprecated || (item.since === null)"
               class="px-4 pb-2 font-medium w-full break-words">
               <div class="">
-                <div class="p-4 pb-2 font-medium">{{ item.qualName }}</div>
+                <div class="p-4 pb-2 font-medium">{{ item.qualSymbol }}</div>
                 <div 
                   class="ml-4 mr-2 px-1 border border-yellow-300 bg-yellow-50 w-[fit-content]"
-                  v-show="item.deprecated_since !== null">deprecated: {{ item.deprecated_since }}
+                  v-show="item.since !== null">deprecated: {{ item.since }}
                 </div>
               </div>
             </td>

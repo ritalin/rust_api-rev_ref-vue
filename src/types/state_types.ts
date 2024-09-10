@@ -1,3 +1,5 @@
+import * as ListFunctions from './listFunctions/types'
+
 export type Condition = Partial<{
     phrase: string
     withSlice: boolean
@@ -10,11 +12,12 @@ export type ConditionSet = {
     returns: Condition
 }
 
-export type SearchResult = {
-    id: number
-    qualName: string
-    deprecated_since: string | null
-}
+export type SearchResult = ListFunctions.ResultSet;
+// export type SearchResult = {
+//         id: number
+//     qualName: string
+//     deprecated_since: string | null
+// }
 
 export type CrateId = number & { crate_id: never }
 

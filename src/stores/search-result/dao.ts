@@ -3,31 +3,37 @@ import type { StructRowProxy } from "@apache-arrow/ts"
 import type { ConnectionWrapper } from "@/service/core"
 import type { ConditionSet, Crate, SearchResult } from "@/types/state_types"
 
-import queryListFunctions from '@/assets/sql/listFunctions.sql?raw'
-import queryListCrates from '@/assets/sql/listCrates.sql?raw'
+import { type TypeCategory } from '@/types/user-types/TypeCategory'
+import queryListFunctions from '@/types/listFunctions/query.sql?raw'
+import * as ListFunctions from '@/types/listFunctions/types'
+import queryListCrates from '@/types/listCrates/query.sql?raw'
 
 export const listFunctions = async (conn: ConnectionWrapper, needle: ConditionSet): Promise<SearchResult[]> => {
     console.log("(parameters)", needle)
 
     try {
         const emptieSet = ["", null, undefined]
+        const params: ListFunctions.Parameter = {
+            crateId: Number(needle.crateId),
+            retPhrase: emptieSet.includes(needle.returns.phrase) ? null : needle.returns.phrase as TypeCategory,
+            retCat1: needle.returns.withSlice ? 'slice' as TypeCategory : null,
+            retCat2: needle.returns.withTuple ? 'tuple' as TypeCategory :  null,
+            argPhrase: emptieSet.includes(needle.args.phrase) ? null : needle.args.phrase as TypeCategory,
+            argCat1: needle.args.withSlice ? 'slice' as TypeCategory : null,
+            argCat2: needle.args.withTuple ? 'tuple' as TypeCategory : null
+        };
+
         const results = await conn.runQuery(
             queryListFunctions, 
-            Number(needle.crateId),
-            emptieSet.includes(needle.returns.phrase) ? null : needle.returns.phrase, 
-            needle.returns.withSlice ? 'slice' : null,
-            needle.returns.withTuple ? 'tuple' :  null,
-            emptieSet.includes(needle.args.phrase) ? null : needle.args.phrase,
-            needle.args.withSlice ? 'slice' : null,
-            needle.args.withTuple ? 'tuple' : null,
+            ...ListFunctions.ParameterOrder.map(o => params[o])
         )
 
         const items =  results.toArray().map((row: StructRowProxy<any>) => {
             return {
                 id: row.id,
-                qualName: row.qual_symbol,
-                deprecated_since: row.since,
-            }
+                qualSymbol: row.qual_symbol,
+                since: row.since,
+            } as SearchResult
         })
         console.log("(result)", items.length)
 

@@ -1,12 +1,12 @@
 with ph as materialized (
     select 
-        ?::int as crate_id, 
-        ?::varchar as ret_phrase,
-        ?::type_category as ret_cat_1,
-        ?::type_category as ret_cat_2,
-        ?::varchar as arg_phrase,
-        ?::type_category as arg_cat_1,
-        ?::type_category as arg_cat_2,
+        $crate_id::int as crate_id, 
+        $ret_phrase::varchar as ret_phrase,
+        $ret_cat_1::type_category as ret_cat_1,
+        $ret_cat_2::type_category as ret_cat_2,
+        $arg_phrase::varchar as arg_phrase,
+        $arg_cat_1::type_category as arg_cat_1,
+        $arg_cat_2::type_category as arg_cat_2,
 )
 select v1.*, v2.*
 from (
