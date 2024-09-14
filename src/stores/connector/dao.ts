@@ -1,5 +1,6 @@
 import type { ConnectionWrapper } from "@/service/core"
 import type { StructRowProxy, Table } from "@apache-arrow/ts"
+import {AsyncDBConnection} from '@/service/database_async_2'
 
 import type_category from '@/assets/schemas/types/type_category.sql?raw'
 import type_kind from '@/assets/schemas/types/type_kind.sql?raw'
@@ -34,8 +35,9 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
     await conn.beginTransaction();
     try {
         for (let name of tablenames) {
-            const sql = `copy ${name} from '${namespace}/${name}.parquet' (FORMAT PARQUET)`
-            await conn.runScript(sql)
+            await ingestCoreInternal(conn, namespace, name)
+            // const sql = `copy ${name} from '${namespace}/${name}.parquet' (FORMAT PARQUET)`
+            // await conn.runScript(sql)
         }
         await conn.commit();
     }
@@ -43,4 +45,18 @@ export const ingestCore = async (conn: ConnectionWrapper, namespace: string) => 
         await conn.rollback();
     }
 
+}
+
+const ingestCoreInternal = async (conn: ConnectionWrapper, ns: string, name: string): Promise<void> => {
+    const res = await fetch(`${ns}/${name}.parquet`)
+    const buf = await res.arrayBuffer();
+
+    await conn.createResource(name, buf)
+    try {
+        const sql = `copy ${name} from '${name}' (format parquet)`
+        await conn.runScript(sql)
+    }
+    finally {
+        conn.dropResource(name)
+    }
 }

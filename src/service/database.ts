@@ -43,7 +43,6 @@ class BlockingConnection implements ConnectionWrapper {
     constructor(connection: DuckDBConnection) {
         this.connection = connection
     }
-
     async runQuery(query: string, ...args: any[]): Promise<Table<any>> {
         const stmt = this.connection.prepare(query)
 
@@ -66,4 +65,11 @@ class BlockingConnection implements ConnectionWrapper {
 
     async rollback(): Promise<void> {
         return this.connection.query("rollback")
-    }}
+    }
+    createResource(name: string, buffer: ArrayBuffer): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+    dropResource(name: string): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+}

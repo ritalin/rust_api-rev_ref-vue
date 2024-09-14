@@ -47,14 +47,16 @@ class AsyncDBBindings implements ConnectionProvider {
     }
 
     async connect(): Promise<ConnectionWrapper> {
-        return new AsyncDBConnection(await this.instance.connect())
+        return new AsyncDBConnection(this.instance, await this.instance.connect())
     }
 }
 
-class AsyncDBConnection implements ConnectionWrapper {
+export class AsyncDBConnection implements ConnectionWrapper {
+    db: AsyncDuckDB
     connection: AsyncDuckDBConnection
 
-    constructor(connection: AsyncDuckDBConnection) {
+    constructor(db: AsyncDuckDB, connection: AsyncDuckDBConnection) {
+        this.db = db
         this.connection = connection
     }
 
@@ -82,5 +84,12 @@ class AsyncDBConnection implements ConnectionWrapper {
 
     rollback(): Promise<void> {
         return this.connection.query("rollback")
+    }
+
+    createResource(name: string, buffer: ArrayBuffer): Promise<void> {
+        return this.db.registerFileBuffer(name, new Uint8Array(buffer))
+    }
+    async dropResource(name: string): Promise<void> {
+        await this.db.dropFile(name)
     }
 }

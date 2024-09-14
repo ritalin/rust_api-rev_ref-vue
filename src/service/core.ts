@@ -10,4 +10,6 @@ export interface ConnectionWrapper {
     beginTransaction(): Promise<void>,
     commit(): Promise<void>,
     rollback(): Promise<void>,
+    createResource(name: string, buffer: ArrayBuffer): Promise<void>,
+    dropResource(name: string): Promise<void>
 }
